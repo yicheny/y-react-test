@@ -57,4 +57,28 @@ describe('ToDoList component', () => {
             });
         })
     })
+
+    //快照测试是 Jest 的一大招牌功能。所谓快照，可以简单地理解成是我们应用的一个**“代码截图”**。当我们运行快照测试时，Jest 将会渲染组件并创建其快照文件。这个快照文件包含渲染后组件的整个结构，并且应该与测试文件本身一起提交到代码库。当我们再次运行快照测试时，Jest 会将新的快照与旧的快照进行比较，如果两者不一致，测试就会失败，从而帮助我们确保用户界面不会发生意外改变。
+    //如果我们要对 ToDoList 组件进行任何更改，快照测试就会失败，并且显示当前渲染结果与快照之间的精确差异。如果我们要更新所有失败的快照，可以使用 -u 标志(别名为 --updateSnapshot) 来运行 Jest。输入以下命令，一键更新所有快照：
+    //npm test -- -u
+    describe('快照测试', () => {
+        it('should render correctly', () => {
+            const tasks = [
+                {
+                    id: 0,
+                    name: 'Wash the dishes'
+                },
+                {
+                    id: 1,
+                    name: 'Make the bed'
+                }
+            ];
+
+            const toDoListInstance = shallow(
+                <ToDoList tasks={tasks}/>
+            );
+
+            expect(toDoListInstance).toMatchSnapshot();
+        });
+    });
 });

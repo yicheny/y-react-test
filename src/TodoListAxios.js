@@ -20,13 +20,14 @@ class ToDoList extends Component {
     }
 
     render() {
-        return (
+        return <div>
+            <p>测试快照更新</p>
             <ul>
                 {this.state.tasks.map((task) => (
                     <Task key={task.id} id={task.id} name={task.name} />
                 ))}
             </ul>
-        );
+        </div>
     }
 }
 

@@ -2,12 +2,10 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import axios from 'axios';
 
+//通过 jest.mock 配置 axios 模块的 Mock（确保要在 import TodoList 之前）
 jest.mock('axios');
 
 import TodoListAxios from './TodoListAxios';
-
-//通过 jest.mock 配置 axios 模块的 Mock（确保要在 import TodoList 之前）
-jest.mock('axios');
 
 describe('ToDoList component', () => {
     describe('when rendered', () => {

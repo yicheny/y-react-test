@@ -11,8 +11,9 @@ describe('ToDoList component', () => {
     describe('when rendered', () => {
         it('should fetch a list of tasks', () => {
             const getSpy = jest.spyOn(axios, 'get');//通过 jest.spyOn，我们便可以监听一个函数的使用情况
-            shallow(<TodoListAxios />);//使用配套的 toBeCalled Matcher 来判断该函数是否被调用。
+            const todoListAxios = shallow(<TodoListAxios />);//使用配套的 toBeCalled Matcher 来判断该函数是否被调用。
             expect(getSpy).toBeCalled();
+            expect(todoListAxios).toMatchSnapshot();
         });
     });
 });

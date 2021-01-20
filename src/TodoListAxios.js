@@ -1,6 +1,5 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import axios from 'axios';
-
 import Task from './Task';
 
 const apiUrl = 'https://api.tuture.co';
@@ -8,26 +7,47 @@ const apiUrl = 'https://api.tuture.co';
 class ToDoList extends Component {
     state = {
         tasks: [],
+        newTask:null
     };
 
     componentDidMount() {
         return axios
             .get(`${apiUrl}/tasks`)
             .then((tasksResponse) => {
-                this.setState({ tasks: tasksResponse.data });
+                this.setState({tasks: tasksResponse.data});
             })
             .catch((error) => console.log(error));
     }
 
+    addATask = () => {
+        const {newTask, tasks} = this.state;
+
+        if (!newTask) return;
+        axios.post(`${apiUrl}/tasks`, {task: newTask}).then((res) => {
+            this.setState({tasks: [...tasks].concat([res.data]), newTask: ''});
+        }).catch((error) => {
+            console.log(error)
+        });
+    };
+
+    handleInputChange = (event) => {
+        this.setState({newTask: event.target.value});
+    };
+
     render() {
-        return <div>
-            <p>测试快照更新</p>
-            <ul>
-                {this.state.tasks.map((task) => (
-                    <Task key={task.id} id={task.id} name={task.name} />
-                ))}
-            </ul>
-        </div>
+        const {newTask} = this.state;
+        return (
+            <div>
+                <h1>ToDoList</h1>
+                <input onChange={this.handleInputChange} value={newTask}/>
+                <button onClick={this.addATask}>Add a task</button>
+                <ul>
+                    {this.state.tasks.map((task) => (
+                        <Task key={task.id} id={task.id} name={task.name}/>
+                    ))}
+                </ul>
+            </div>
+        );
     }
 }
 

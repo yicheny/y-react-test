@@ -1,18 +1,28 @@
 'use strict';
 
-export default {
+let currentId = 2;
+
+module.exports =  {
     get: () => {
         return Promise.resolve({
             data: [
                 {
                     id: 0,
-                    name: 'Wash the dishes',
+                    name: 'ylf',
                 },
                 {
                     id: 1,
-                    name: 'Make the bed',
+                    name: 'lpf',
                 },
             ],
         });
     },
+    post: (url,data) => {
+        return Promise.resolve({
+            data: {
+                name: data.task,
+                id: currentId++,
+            },
+        });
+    }
 };

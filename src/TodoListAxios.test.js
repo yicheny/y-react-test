@@ -3,17 +3,31 @@ import { shallow } from 'enzyme';
 import axios from 'axios';
 
 //通过 jest.mock 配置 axios 模块的 Mock（确保要在 import TodoList 之前）
-jest.mock('axios');
+// jest.mock('axios');
 
 import TodoListAxios from './TodoListAxios';
 
 describe('ToDoList component', () => {
-    describe('when rendered', () => {
-        it('should fetch a list of tasks', () => {
-            const getSpy = jest.spyOn(axios, 'get');//通过 jest.spyOn，我们便可以监听一个函数的使用情况
-            const todoListAxios = shallow(<TodoListAxios />);//使用配套的 toBeCalled Matcher 来判断该函数是否被调用。
-            expect(getSpy).toBeCalled();
-            expect(todoListAxios).toMatchSnapshot();
-        });
-    });
+    it('修改流程测试',()=>{
+        const getSpy = jest.spyOn(axios, 'get');
+        const toDoListInstance = shallow(<TodoListAxios/>);
+        expect(getSpy).toBeCalled();
+
+        const newTask = 'new task name';
+        const taskInput = toDoListInstance.find('input');
+        taskInput.simulate('change', { target: { value: newTask }});
+
+        const postSpy = jest.spyOn(axios, 'post');
+        const button = toDoListInstance.find('button');
+        button.simulate('click');
+        expect(postSpy).toBeCalled();
+
+        const postPromise = postSpy.mock.results.pop().value;
+
+        return postPromise.then((postResponse) => {
+            const currentState = toDoListInstance.state();
+            expect(currentState.tasks.includes((postResponse.data))).toBe(true);
+            expect(currentState.tasks[0].name).toBe('new task name')
+        })
+    })
 });
